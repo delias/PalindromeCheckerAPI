@@ -49,6 +49,15 @@ public class PalindromeController : ControllerBase
 			return BadRequest("The text is not a palindrome.");
 		}
 
+		//Prevent duplicates
+		var existingPalindrome = await _context.Palindromes
+										  .FirstOrDefaultAsync(p => p.Text == text);
+
+		if (existingPalindrome != null)
+		{
+			return BadRequest("Palindrome already exists.");
+		}
+
 		// Create a new Palindrome instance with the text and the current date and time
 		var palindrome = new Palindrome
 		{
